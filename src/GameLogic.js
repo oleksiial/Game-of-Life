@@ -1,10 +1,11 @@
 export default class GameLogic {
-  constructor(callback) {
+  constructor() {
     this.size = 30;
     this.grid = this.createGrid(this.size, this.size, true);
     this.delay = 100;
-    this.callback = callback;
   }
+
+  setCallbackOnChangeState = (callback) => {this.callback = callback;}
 
   createGrid = (width, height, fillRandom) => {
     var result = [];
