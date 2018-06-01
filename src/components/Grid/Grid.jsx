@@ -1,6 +1,7 @@
 import './Grid.css';
 import React, { Component } from 'react';
 import Cell from '../Cell';
+import Controls from '../Controls';
 import GameLogic from '../../GameLogic';
 
 class Grid extends Component {
@@ -14,8 +15,8 @@ class Grid extends Component {
   onStopClick = () => { this.gameLogic.stopTicker(); }
   onResetClick = () => { this.gameLogic.resetGrid(); }
   onRandomClick = () => { this.gameLogic.randomize(); }
-  onCellClick = (i, j) => { this.gameLogic.swapCell(i, j); }
   onChangeRange = (e) => { this.gameLogic.setSpeed(e.target.value); }
+  onCellClick = (i, j) => { this.gameLogic.swapCell(i, j); }
 
   render() {
     const grid = this.gameLogic.grid;
@@ -38,11 +39,13 @@ class Grid extends Component {
             })
           }
         </div>
-        <button onClick={this.onStartClick}>Start</button>
-        <button onClick={this.onStopClick}>Stop</button>
-        <button onClick={this.onResetClick}>Reset</button>
-        <button onClick={this.onRandomClick}>Random</button>
-        <input type="range" min="1" max="100" onInput={this.onChangeRange}/>
+        <Controls
+          onStartClick={this.onStartClick}
+          onStopClick={this.onStopClick}
+          onResetClick={this.onResetClick}
+          onRandomClick={this.onRandomClick}
+          onChangeRange={this.onChangeRange}
+        />
       </div>
     );
   }

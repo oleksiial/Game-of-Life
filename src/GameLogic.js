@@ -35,6 +35,7 @@ export default class GameLogic {
   setSpeed = (speedRate) => {
     this.stopTicker();
     this.delay = 1000 / speedRate;
+    this.startTicker();
   }
 
   resetGrid = () => {
