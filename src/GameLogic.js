@@ -2,7 +2,7 @@ export default class GameLogic {
   constructor() {
     this.size = 30;
     this.grid = this.createGrid(this.size, this.size, true);
-    this.delay = 100;
+    this.delay = 300;
   }
 
   setCallbackOnChangeState = (callback) => {this.callback = callback;}
@@ -53,12 +53,12 @@ export default class GameLogic {
 
   swapCell = (i, j) => {
     this.grid[i][j] = !this.grid[i][j];
+    console.log(this.grid);
     this.callback();
   }
 
-  countNeightbours = (i, j) => {
+  countNeightbours = (i, j, directions) => {
     let count = 0;
-    const directions = [[-1, -1],[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
     for (let d of directions) {
       if(this.grid[i+d[0]][j+d[1]] === true) {
         count++;
@@ -69,9 +69,16 @@ export default class GameLogic {
 
   tick = () => {
     let newGrid = this.createGrid(this.size, this.size, false);
-    for (var i = 1; i < this.size - 1; i++) {
-      for (var j = 1; j < this.size - 1; j++) {
-        const count = this.countNeightbours(i, j);
+    const midD = [[-1, -1],[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+    const leftD = [[-1, this.size - 1], [-1, 0], [-1, 1], [0, this.size - 1], [0, 1], [1, this.size - 1], [1, 0], [1, 1]];
+    const rightD = [[-1, -1], [-1, 0], [-1, 1 - this.size], [0, -1], [0, 1 - this.size], [1, -1], [1, 0], [1, 1 - this.size]];
+
+    for (let i = 1; i < this.size - 1; i++) {
+      for (let j = 0; j < this.size; j++) {
+        let count = 0;
+        if (j === 0) { count = this.countNeightbours(i, j, leftD); console.log(count); }
+        else if (j === this.size - 1) {count = this.countNeightbours(i, j, rightD);}
+        else count = this.countNeightbours(i, j, midD);
         newGrid[i][j] = false;
         if (this.grid[i][j] === true && (count === 2 || count === 3)) {
             newGrid[i][j] = true;
