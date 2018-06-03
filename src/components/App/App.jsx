@@ -5,32 +5,45 @@ import GameLogic from '../../GameLogic';
 import Grid from '../Grid';
 
 class App extends Component {
-  constructor (props) {
-    super(props);
-    this.gameLogic = new GameLogic();
-  }
+    constructor (props) {
+        super(props);
+        this.gameLogic = new GameLogic();
+        this.gameLogic.setCallbackOnChangeState(() => {
+            this.setState({});
+        });
+    }
 
-  onStartClick = () => { this.gameLogic.startTicker(); }
-  onStopClick = () => { this.gameLogic.stopTicker(); }
-  onResetClick = () => { this.gameLogic.resetGrid(); }
-  onRandomClick = () => { this.gameLogic.randomize(); }
-  // onChangeRange = (value) => { this.gameLogic.setSpeed(value); }
+    onStartClick = () => { this.gameLogic.startTicker(50); }
+    onStopClick = () => { this.gameLogic.stopTicker(); }
+    onResetClick = () => { this.gameLogic.resetGrid(); }
+    onRandomClick = () => { this.gameLogic.randomize(); }
+    onChangeSpeed = (value) => { this.gameLogic.setSpeed(value); }
+    onCellClick = (i, j) => { this.gameLogic.swapCell(i, j); }
+    onBoundsClick = () => { this.gameLogic.toggleBounds(); }
 
-  render() {
-    return (
-      <div className='app'>
-        <div className='grid-container'>
-          <Grid gameLogic={this.gameLogic}/>
-        </div>
-        <Controls
-          onStartClick={this.onStartClick}
-          onStopClick={this.onStopClick}
-          onResetClick={this.onResetClick}
-          onRandomClick={this.onRandomClick}
-        />
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className='app'>
+                <div className='grid-container'>
+                    <Grid
+                        grid={this.gameLogic.grid}
+                        onCellClick={this.onCellClick}
+                    />
+                </div>
+                <Controls
+                    isRunning={this.gameLogic.isRunning}
+                    bounds={this.gameLogic.bounds}
+                    speedRate={this.gameLogic.speedRate}
+                    onStartClick={this.onStartClick}
+                    onStopClick={this.onStopClick}
+                    onResetClick={this.onResetClick}
+                    onRandomClick={this.onRandomClick}
+                    onBoundsClick={this.onBoundsClick}
+                    onChangeSpeed={this.onChangeSpeed}
+                />
+            </div>
+        );
+    }
 }
 
 export default App;

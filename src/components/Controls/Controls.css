@@ -1,20 +1,28 @@
 .controls {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   border: solid 1px #222;
   width: 100%;
 }
 
-.controls > button {
-  background: none;
-  border-color: transparent;
+.controls > .boundCheckBoxWrapper, button {
+  display: flex;
+  align-items: center;
+  background: #eef;
+  border: solid 2px transparent;
   border-radius: 3px;
   outline: none;
-  margin: 10px;
+  margin: 5px;
   padding: 10px;
   box-sizing: content-box;
 }
 
-.controls > button:hover {
+.controls > .boundCheckBoxWrapper > input {
+  margin-left: 5px;
+}
+
+.controls > button:hover, .boundCheckBoxWrapper:hover {
+  cursor: default;
   border: solid 2px #33f;
 }
