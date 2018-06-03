@@ -1,11 +1,22 @@
 {
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaVersion": 8,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
+  parser: "babel-eslint",
+  parserOptions: {
+    ecmaVersion: 8,
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
     }
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"]
+  extends: ["eslint:recommended", "plugin:react/recommended"],
+  globals: {
+    document: false,
+    setInterval: false,
+    clearInterval: false,
+    console: false,
+  },
+  rules: {
+    no-console: 'warn',
+    indent: ["error", 2],
+    quotes: ["error", "single"]
+  }
 }
