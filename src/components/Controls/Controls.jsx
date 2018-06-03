@@ -1,8 +1,21 @@
 import './Controls.css';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+const propTypes = {
+  isRunning: PropTypes.bool.isRequired,
+  bounds: PropTypes.bool.isRequired,
+  speedRate: PropTypes.number.isRequired,
+  onStartClick: PropTypes.func.isRequired,
+  onStopClick: PropTypes.func.isRequired,
+  onResetClick: PropTypes.func.isRequired,
+  onRandomClick: PropTypes.func.isRequired,
+  onBoundsClick: PropTypes.func.isRequired,
+  onChangeSpeed: PropTypes.func.isRequired
+};
 
 class Controls extends Component {
-    shouldComponentUpdate (newProps, newState) {
+    shouldComponentUpdate (newProps) {
         return newProps.isRunning !== this.props.isRunning ||
             newProps.bounds !== this.props.bounds ||
             newProps.speedRate !== this.props.speedRate;
@@ -43,5 +56,7 @@ class Controls extends Component {
         );
     }
 }
+
+Controls.propTypes = propTypes;
 
 export default Controls;

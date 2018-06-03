@@ -1,12 +1,20 @@
-import React, { Component } from 'react';
 import './Cell.css';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+const propTypes = {
+  i: PropTypes.number.isRequired,
+  j: PropTypes.number.isRequired,
+  value: PropTypes.bool.isRequired,
+  onCellClick: PropTypes.func.isRequired
+};
 
 class Cell extends Component {
   onClick = () => {
     this.props.onCellClick(this.props.i, this.props.j);
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
+  shouldComponentUpdate = (nextProps) => {
     return nextProps.value !== this.props.value;
   }
 
@@ -21,5 +29,7 @@ class Cell extends Component {
     );
   }
 }
+
+Cell.propTypes = propTypes;
 
 export default Cell;

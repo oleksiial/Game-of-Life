@@ -1,6 +1,12 @@
 import './Grid.css';
 import React, { Component } from 'react';
 import Cell from '../Cell';
+import PropTypes from 'prop-types';
+
+const propTypes = {
+  grid: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)).isRequired,
+  onCellClick: PropTypes.func.isRequired
+};
 
 class Grid extends Component {
     onCellClick = (i, j) => { this.props.onCellClick(i, j); }
@@ -28,5 +34,7 @@ class Grid extends Component {
         );
     }
 }
+
+Grid.propTypes = propTypes;
 
 export default Grid;
