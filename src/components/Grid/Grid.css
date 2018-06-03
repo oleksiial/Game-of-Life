@@ -1,4 +1,7 @@
 .grid {
-  display: flex;
   border: solid 1px #222;
+}
+
+.grid > .row {
+  display: flex;
 }

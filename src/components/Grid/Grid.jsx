@@ -17,7 +17,7 @@ class Grid extends Component {
         {
           grid.map((sub, i) => {
             return (
-              <div className={'col'} key={i}>
+              <div className={'row'} key={i}>
                 {sub.map((v, j) => {
                   return (
                     <div key={j}>
