@@ -31,10 +31,6 @@ class App extends Component {
           />
         </div>
         <Controls
-          isRunning={this.gameLogic.isRunning}
-          bounds={this.gameLogic.bounds}
-          speedRate={this.gameLogic.speedRate}
-          onStartClick={this.onStartClick}
           onStopClick={this.onStopClick}
           onResetClick={this.onResetClick}
           onRandomClick={this.onRandomClick}

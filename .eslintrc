@@ -9,6 +9,7 @@
   },
   extends: ["eslint:recommended", "plugin:react/recommended"],
   globals: {
+    window: false,
     document: false,
     setInterval: false,
     clearInterval: false,

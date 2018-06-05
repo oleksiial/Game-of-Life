@@ -1,6 +1,8 @@
 import './Controls.css';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { startGame } from '../../redux/actions/game';
 
 const propTypes = {
   isRunning: PropTypes.bool.isRequired,
@@ -51,4 +53,18 @@ class Controls extends Component {
 
 Controls.propTypes = propTypes;
 
-export default Controls;
+function mapStateToProps (state) {
+    return {
+        isRunning: state.game.isRunning,
+        bounds: state.game.bounds,
+        speedRate: state.game.speedRate
+    };
+}
+
+function mapDispatchToProps (dispatch) {
+    return {
+        onStartClick: () => dispatch(startGame())
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Controls);
