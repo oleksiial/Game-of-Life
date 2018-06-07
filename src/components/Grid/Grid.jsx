@@ -1,7 +1,9 @@
 import './Grid.css';
 import React, { Component } from 'react';
 import Cell from '../Cell';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { toggleCell } from '../../redux/actions/game';
 
 const propTypes = {
   grid: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)).isRequired,
@@ -12,11 +14,10 @@ class Grid extends Component {
   onCellClick = (i, j) => { this.props.onCellClick(i, j); }
 
   render() {
-    const { grid } = this.props;
     return (
       <div className='grid'>
         {
-          grid.map((sub, i) => {
+          this.props.grid.map((sub, i) => {
             return (
               <div className={'row'} key={i}>
                 {sub.map((v, j) => {
@@ -37,4 +38,16 @@ class Grid extends Component {
 
 Grid.propTypes = propTypes;
 
-export default Grid;
+function mapStateToProps (state) {
+  return {
+    grid: state.game.grid
+  };
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    onCellClick: (i, j) => dispatch(toggleCell(i, j))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Grid);

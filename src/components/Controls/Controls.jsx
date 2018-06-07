@@ -1,8 +1,8 @@
 import './Controls.css';
 import React, { Component } from 'react';
+import { startGame, stopGame, changeSpeed, toggleBounds, reset } from '../../redux/actions/game';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { startGame } from '../../redux/actions/game';
 
 const propTypes = {
   isRunning: PropTypes.bool.isRequired,
@@ -17,13 +17,9 @@ const propTypes = {
 };
 
 class Controls extends Component {
-  shouldComponentUpdate (newProps) {
-    return newProps.isRunning !== this.props.isRunning ||
-            newProps.bounds !== this.props.bounds ||
-            newProps.speedRate !== this.props.speedRate;
+  onChangeSpeed = (e) => {
+    this.props.onChangeSpeed(parseInt(e.target.value, 10));
   }
-
-  onChangeSpeed = (e) => {this.props.onChangeSpeed(e.target.value); }
 
   render() {
     return (
@@ -54,17 +50,22 @@ class Controls extends Component {
 Controls.propTypes = propTypes;
 
 function mapStateToProps (state) {
-    return {
-        isRunning: state.game.isRunning,
-        bounds: state.game.bounds,
-        speedRate: state.game.speedRate
-    };
+  return {
+    isRunning: state.game.isRunning,
+    bounds: state.game.bounds,
+    speedRate: state.game.speedRate
+  };
 }
 
 function mapDispatchToProps (dispatch) {
-    return {
-        onStartClick: () => dispatch(startGame())
-    };
+  return {
+    onStartClick: () => dispatch(startGame()),
+    onStopClick: () => dispatch(stopGame()),
+    onResetClick: () => dispatch(reset(false)),
+    onRandomClick: () => dispatch(reset(true)),
+    onBoundsClick: () => dispatch(toggleBounds()),
+    onChangeSpeed: (value) => dispatch(changeSpeed(value))
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls);

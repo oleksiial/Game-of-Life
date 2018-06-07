@@ -1,5 +1,5 @@
 import './Cell.css';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -9,14 +9,8 @@ const propTypes = {
   onCellClick: PropTypes.func.isRequired
 };
 
-class Cell extends Component {
-  onClick = () => {
-    this.props.onCellClick(this.props.i, this.props.j);
-  }
-
-  shouldComponentUpdate = (nextProps) => {
-    return nextProps.value !== this.props.value;
-  }
+class Cell extends PureComponent {
+  onClick = () => { this.props.onCellClick(this.props.i, this.props.j); }
 
   render() {
     const style = this.props.value ? {background: '#393'} : {background: '#ddf'};
