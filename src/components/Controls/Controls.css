@@ -6,23 +6,39 @@
   width: 100%;
 }
 
-.controls > .boundCheckBoxWrapper, button {
+.controls > .boundCheckBoxWrapper, .inputWrapper, button {
   display: flex;
   align-items: center;
   background: #eef;
   border: solid 2px transparent;
   border-radius: 3px;
   outline: none;
-  margin: 5px;
-  padding: 10px;
+  margin: 3px;
+  padding: 6px;
   box-sizing: content-box;
 }
 
 .controls > .boundCheckBoxWrapper > input {
-  margin-left: 5px;
+  margin-left: 15px;
 }
 
-.controls > button:hover, .boundCheckBoxWrapper:hover {
+.controls > .inputWrapper {
+  justify-content: space-between;
+}
+
+.controls > .inputWrapper > input {
+  background: #eef;
+  border: solid 2px #666;
+  padding: 2px;
+  border-radius: 3px;
+  outline: none;
+  box-sizing: content-box;
+  width: 42px;
+  text-align: center;
+  margin: 5px;
+}
+
+.controls > button:hover, .boundCheckBoxWrapper:hover, .inputWrapper:hover {
   cursor: default;
   border: solid 2px #33f;
 }

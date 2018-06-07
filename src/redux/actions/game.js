@@ -1,7 +1,8 @@
 export const START_GAME = 'START_GAME';
 export const STOP_GAME = 'STOP_GAME';
 export const TICK = 'TICK';
-export const CHANGE_SIZE = 'CHANGE_SIZE';
+export const CHANGE_WIDTH = 'CHANGE_WIDTH';
+export const CHANGE_HEIGHT = 'CHANGE_HEIGHT';
 export const CHANGE_SPEED = 'CHANGE_SPEED';
 export const TOGGLE_BOUNDS = 'TOGGLE_BOUNDS';
 export const TOGGLE_CELL = 'TOGGLE_CELL';
@@ -11,16 +12,16 @@ export function startGame () {
   return (dispatch, getState) => {
     dispatch({type: START_GAME});
     setInterval(() => {
-      console.log(getState().game.bounds);
       const { grid, width, height, bounds } = getState().game;
-      dispatch({type: TICK, grid: tick(grid, width, bounds)});
+      dispatch({type: TICK, grid: tick(grid, width, height, bounds)});
     }, 1000 / getState().game.speedRate);
   }
 }
 
 export function stopGame () {
-  for (var i = 0; i < 99999; i++)
+  for (let i = 0; i < 99999; i++) {
     clearInterval(i);
+  }
 
   return {type: STOP_GAME};
 }
@@ -31,6 +32,26 @@ export function reset (randomize) {
       dispatch({type: STOP_GAME});
     }
     dispatch({type: RESET, grid: createGrid(getState().game.width, getState().game.height, randomize)});
+  }
+}
+
+export function changeWidth (width) {
+  return (dispatch, getState) => {
+    if (getState().game.isRunning) {
+      dispatch({type: STOP_GAME});
+    }
+    dispatch({type: CHANGE_WIDTH, width: width});
+    dispatch(reset(false));
+  }
+}
+
+export function changeHeight (height) {
+  return (dispatch, getState) => {
+    if (getState().game.isRunning) {
+      dispatch({type: STOP_GAME});
+    }
+    dispatch({type: CHANGE_HEIGHT, height: height});
+    dispatch(reset(false));
   }
 }
 
@@ -52,7 +73,6 @@ export function changeSpeed (value) {
   return (dispatch, getState) => {
     dispatch({type: CHANGE_SPEED, speedRate: value});
     if (getState().game.isRunning) {
-      console.log('restart');
       dispatch(stopGame());
       dispatch(startGame());
     }
@@ -61,9 +81,9 @@ export function changeSpeed (value) {
 
 export function createGrid (width, height, fillRandom) {
   var result = [];
-  for (var i = 0; i < width; i++) {
+  for (var i = 0; i < height; i++) {
     result[i] = [];
-    for (var j = 0; j < height; j++) {
+    for (var j = 0; j < width; j++) {
       if (fillRandom) {
         result[i][j] = ((Math.random() * 4) | 0) === 1 ? true : false;
       } else {
@@ -74,7 +94,7 @@ export function createGrid (width, height, fillRandom) {
   return result;
 }
 
-const countNeightbours = (grid, i, j, size, bounds) => {
+const countNeightbours = (grid, i, j, width, height, bounds) => {
   const midD = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   let leftD, rightD, leftTopD, rightTopD;
   let topD, bottomD, leftBottomD, rightBottomD;
@@ -88,32 +108,32 @@ const countNeightbours = (grid, i, j, size, bounds) => {
     leftBottomD = [[-1, 0], [-1, 1], [0, 1]];
     rightBottomD = [[-1, -1], [-1, 0], [0, -1]];
   } else {
-    leftD = [[-1, size - 1], [-1, 0], [-1, 1], [0, size - 1], [0, 1], [1, size - 1], [1, 0], [1, 1]];
-    rightD = [[-1, -1], [-1, 0], [-1, 1 - size], [0, -1], [0, 1 - size], [1, -1], [1, 0], [1, 1 - size]];
-    leftTopD = [[size - 1, size - 1], [size - 1, 0], [size - 1, 1], [0, size - 1], [0, 1], [1, size - 1], [1, 0], [1, 1]];
-    rightTopD = [[size - 1, -1], [size - 1, 0], [size - 1, 1 - size], [0, -1], [0, 1 - size], [1, -1], [1, 0], [1, 1 - size]];
-    topD = [[size - 1, -1], [0, -1], [1, -1], [size - 1, 0], [1, 0], [size - 1, 1], [0, 1], [1, 1]];
-    bottomD = [[-1, -1], [0, -1], [1 - size, -1], [-1, 0], [1 - size, 0], [-1, 1], [0, 1], [1 - size, 1]];
-    leftBottomD = [[-1, size - 1], [-1, 0], [-1, 1], [0, size - 1], [0, 1], [1 - size, size - 1], [1 - size, 0], [1 - size, 1]];
-    rightBottomD = [[-1, -1], [-1, 0], [-1, 1 - size], [0, -1], [0, 1 - size], [1 - size, -1], [1 - size, 0], [1 - size, 1 - size]];
+    leftD = [[-1, width - 1], [-1, 0], [-1, 1], [0, width - 1], [0, 1], [1, width - 1], [1, 0], [1, 1]];
+    rightD = [[-1, -1], [-1, 0], [-1, 1 - width], [0, -1], [0, 1 - width], [1, -1], [1, 0], [1, 1 - width]];
+    leftTopD = [[height - 1, width - 1], [height - 1, 0], [height - 1, 1], [0, width - 1], [0, 1], [1, width - 1], [1, 0], [1, 1]];
+    rightTopD = [[height - 1, -1], [height - 1, 0], [height - 1, 1 - width], [0, -1], [0, 1 - width], [1, -1], [1, 0], [1, 1 - width]];
+    topD = [[height - 1, -1], [0, -1], [1, -1], [height - 1, 0], [1, 0], [height - 1, 1], [0, 1], [1, 1]];
+    bottomD = [[-1, -1], [0, -1], [1 - height, -1], [-1, 0], [1 - height, 0], [-1, 1], [0, 1], [1 - height, 1]];
+    leftBottomD = [[-1, width - 1], [-1, 0], [-1, 1], [0, height - 1], [0, 1], [1 - height, width - 1], [1 - height, 0], [1 - height, 1]];
+    rightBottomD = [[-1, -1], [-1, 0], [-1, 1 - width], [0, -1], [0, 1 - width], [1 - height, -1], [1 - height, 0], [1 - height, 1 - width]];
   }
 
   let count = 0;
   if (i === 0 && j === 0) {
     count = doCountNeightbours(grid, i, j, leftTopD);
-  } else if (i === 0 && j === size - 1) {
+  } else if (i === 0 && j === width - 1) {
     count = doCountNeightbours(grid, i, j, rightTopD);
-  } else if (i === size - 1 && j === 0) {
+  } else if (i === height - 1 && j === 0) {
     count = doCountNeightbours(grid, i, j, leftBottomD);
-  } else if (i === size - 1 && j === size - 1) {
+  } else if (i === height - 1 && j === width - 1) {
     count = doCountNeightbours(grid, i, j, rightBottomD);
   } else if (j === 0) {
     count = doCountNeightbours(grid, i, j, leftD);
-  } else if (j === size - 1) {
+  } else if (j === width - 1) {
     count = doCountNeightbours(grid, i, j, rightD);
   } else if (i === 0) {
     count = doCountNeightbours(grid, i, j, topD);
-  } else if (i === size - 1) {
+  } else if (i === height - 1) {
     count = doCountNeightbours(grid, i, j, bottomD);
   } else
     count = doCountNeightbours(grid, i, j, midD);
@@ -130,11 +150,11 @@ const doCountNeightbours = (grid, i, j, directions) => {
   return count;
 };
 
-const tick = (grid, size, bounds) => {
-  let newGrid = createGrid(size, size, false);
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      const count = countNeightbours(grid, i, j, size, bounds);
+const tick = (grid, width, height, bounds) => {
+  let newGrid = createGrid(width, height, false);
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const count = countNeightbours(grid, i, j, width, height, bounds);
       newGrid[i][j] = false;
       if (grid[i][j] === true && (count === 2 || count === 3)) {
         newGrid[i][j] = true;

@@ -1,13 +1,14 @@
-import { START_GAME, STOP_GAME, TICK, TOGGLE_CELL, CHANGE_SPEED, TOGGLE_BOUNDS, RESET } from '../actions/game';
+import { START_GAME, STOP_GAME, TICK,
+  TOGGLE_CELL, CHANGE_SPEED, TOGGLE_BOUNDS, RESET, CHANGE_WIDTH, CHANGE_HEIGHT } from '../actions/game';
 import { createGrid } from '../actions/game';
 
 const initialState = {
   width: 15,
-  height: 15,
-  grid: createGrid(15, 15, true),
+  height: 25,
+  grid: createGrid(15, 25, true),
   bounds: true,
   isRunning: false,
-  speedRate: 2
+  speedRate: 50
 }
 
 export default function (state = initialState, action) {
@@ -24,6 +25,10 @@ export default function (state = initialState, action) {
     return {...state, grid: action.grid};
   case CHANGE_SPEED:
     return {...state, speedRate: action.speedRate};
+  case CHANGE_WIDTH:
+    return {...state, width: action.width};
+  case CHANGE_HEIGHT:
+    return {...state, height: action.height};
   case TOGGLE_CELL:
     return {
       ...state, grid: state.grid.map(
