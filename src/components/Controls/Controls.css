@@ -1,9 +1,9 @@
 .controls {
+  position: static;
+  max-width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: solid 1px #222;
-  width: 100%;
 }
 
  .controls .boundCheckBoxWrapper, .inputWrapper, button {
@@ -34,7 +34,7 @@
 .controls .inputWrapper input {
   background: #eef;
   border: solid 2px #666;
-  padding: 2px;
+  padding: 4px;
   border-radius: 3px;
   outline: none;
   box-sizing: content-box;

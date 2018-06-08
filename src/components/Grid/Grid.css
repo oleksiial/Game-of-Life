@@ -1,5 +1,5 @@
 .grid {
-  border: solid 1px #222;
+  margin: auto;
 }
 
 .grid > .row {

@@ -5,12 +5,11 @@
   font-size: 1em;
 }
 
-.app {
-  margin: 5px auto;
-  display: flex;
-  width: max-content;
+html, body {
+    height: 100%;
 }
-
-.app > .grid-container {
-  display: flex;
+.app {
+    height: 100%;
+    width: 100%;
+    display: flex;
 }
