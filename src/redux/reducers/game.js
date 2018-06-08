@@ -8,9 +8,11 @@ const initialState = {
   height: 20,
   cellSize: 20,
   grid: createGrid(40, 20, true),
+  prevGrid: [[]],
   borders: true,
   isRunning: false,
-  speedRate: 50
+  speedRate: 50,
+  nGenerations: 0
 }
 
 export default function (state = initialState, action) {
@@ -20,11 +22,11 @@ export default function (state = initialState, action) {
   case STOP_GAME:
     return {...state, isRunning: false};
   case TICK:
-    return {...state, grid: action.grid};
+    return {...state, prevGrid: state.grid, grid: action.grid, nGenerations: state.nGenerations + 1};
   case TOGGLE_BORDERS:
     return {...state, borders: !state.borders};
   case RESET:
-    return {...state, grid: action.grid};
+    return {...state, grid: action.grid, nGenerations: 0};
   case CHANGE_SPEED:
     return {...state, speedRate: action.speedRate};
   case CHANGE_WIDTH:

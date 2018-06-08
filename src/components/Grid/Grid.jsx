@@ -38,7 +38,7 @@ class Grid extends Component {
     this.props.grid.forEach((sub, i) => {
       sub.forEach((v, j) => {
         ctx.fillStyle = v? '#393': '#ddf';
-        ctx.fillRect(j * this.props.cellSize, i * this.props.cellSize, this.props.cellSize - 1, this.props.cellSize - 1);
+        ctx.fillRect(j * this.props.cellSize, i * this.props.cellSize, this.props.cellSize, this.props.cellSize);
       });
     });
   }

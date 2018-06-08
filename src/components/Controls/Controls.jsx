@@ -12,6 +12,7 @@ const propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   cellSize: PropTypes.number.isRequired,
+  nGenerations: PropTypes.number.isRequired,
   onStartClick: PropTypes.func.isRequired,
   onStopClick: PropTypes.func.isRequired,
   onClearClick: PropTypes.func.isRequired,
@@ -42,7 +43,7 @@ class Controls extends Component {
       this.row.current.value - 1,
       this.col.current.value - 1
     );
-    this.col.current.value = parseInt(this.col.current.value) + 5;
+    this.col.current.value = parseInt(this.col.current.value, 10) + 5;
   }
   onGunClick = () => {
     this.props.onGliederClick(
@@ -126,6 +127,9 @@ class Controls extends Component {
           <button onClick={this.onGliederClick} disabled={this.props.isRunning}>Glieder</button>
           <button onClick={this.onGunClick} disabled={this.props.isRunning || this.props.width < 38 || this.props.height < 11}>Gun</button>
         </div>
+        <div className='inputWrapper'>
+          <span>Generation: {this.props.nGenerations}</span>
+        </div>
       </div>
     );
   }
@@ -140,7 +144,8 @@ function mapStateToProps (state) {
     speedRate: state.game.speedRate,
     width: state.game.width,
     height: state.game.height,
-    cellSize: state.game.cellSize
+    cellSize: state.game.cellSize,
+    nGenerations: state.game.nGenerations
   };
 }
 

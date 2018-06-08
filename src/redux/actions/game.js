@@ -14,10 +14,28 @@ export function startGame () {
   return (dispatch, getState) => {
     dispatch({type: START_GAME});
     setInterval(() => {
-      const { grid, width, height, borders } = getState().game;
-      dispatch({type: TICK, grid: tick(grid, width, height, borders)});
+      const { grid, width, height, borders, prevGrid } = getState().game;
+      const newGrid = tick(grid, width, height, borders);
+      if (arraysEqual(newGrid, prevGrid)) {
+        console.log(newGrid, prevGrid);
+        dispatch(stopGame());
+      }
+      dispatch({type: TICK, grid: newGrid});
     }, 1000 / getState().game.speedRate);
   }
+}
+
+const arraysEqual = (a, b) => {
+  if (a === b) return true;
+  if (a === null || b === null) return false;
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; ++i) {
+    for (let j = 0; j < a[0].length; ++j) {
+      if (a[i][j] !== b[i][j]) return false;
+    }
+  }
+  return true;
 }
 
 export function stopGame () {
