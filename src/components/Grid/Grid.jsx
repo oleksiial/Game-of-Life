@@ -1,6 +1,5 @@
 import './Grid.css';
 import React, { Component } from 'react';
-import Cell from '../Cell';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleCell } from '../../redux/actions/game';
@@ -11,26 +10,45 @@ const propTypes = {
 };
 
 class Grid extends Component {
-  onCellClick = (i, j) => { this.props.onCellClick(i, j); }
+  constructor (props) {
+    super(props);
+    this.canvas = React.createRef();
+  }
+
+  componentDidMount () {
+    this.updateCanvas();
+  }
+
+  componentDidUpdate () {
+    this.updateCanvas();
+  }
+
+  onCellClick = (e) => {
+    const i = (e.clientY - this.canvas.current.offsetTop) / 15 | 0;
+    const j = (e.clientX - this.canvas.current.offsetLeft) / 15 | 0;
+    this.props.onCellClick(i, j);
+  }
+
+  updateCanvas = () => {
+    const ctx = this.canvas.current.getContext('2d');
+    ctx.clearRect(0,0, 300, 300);
+    this.props.grid.forEach((sub, i) => {
+      sub.map((v, j) => {
+        ctx.fillStyle = v? '#393': '#ddf';
+        ctx.fillRect(j * 15, i * 15, 13, 13);
+      });
+    });
+  }
 
   render() {
     return (
       <div className='grid'>
-        {
-          this.props.grid.map((sub, i) => {
-            return (
-              <div className={'row'} key={i}>
-                {sub.map((v, j) => {
-                  return (
-                    <div key={j}>
-                      <Cell i={i} j={j} onCellClick={this.onCellClick} value={v} />
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })
-        }
+        <canvas
+          width={this.props.grid[0].length * 15}
+          height={this.props.grid.length * 15}
+          ref={this.canvas}
+          onClick={this.onCellClick}
+        ></canvas>
       </div>
     );
   }
