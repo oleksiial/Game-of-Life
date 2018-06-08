@@ -1,11 +1,12 @@
 import { START_GAME, STOP_GAME, TICK,
-  TOGGLE_CELL, CHANGE_SPEED, TOGGLE_BOUNDS, RESET, CHANGE_WIDTH, CHANGE_HEIGHT } from '../actions/game';
+  TOGGLE_CELL, CHANGE_SPEED, TOGGLE_BOUNDS, RESET, CHANGE_WIDTH, CHANGE_HEIGHT,
+  ADD_PATTERN } from '../actions/game';
 import { createGrid } from '../actions/game';
 
 const initialState = {
-  width: 15,
-  height: 25,
-  grid: createGrid(15, 25, true),
+  width: 40,
+  height: 20,
+  grid: createGrid(40, 20, true),
   bounds: true,
   isRunning: false,
   speedRate: 50
@@ -35,6 +36,20 @@ export default function (state = initialState, action) {
         (sub, i) => {
           return sub.map((v, j) => {
             return (i===action.i&&j===action.j) ? !v: v
+          });
+        }
+      )
+    };
+  case ADD_PATTERN:
+    return {
+      ...state, grid: state.grid.map(
+        (sub, i) => {
+          return sub.map((v, j) => {
+            if (i >= action.i && i < action.i + action.pattern.length &&
+              j >= action.j && j < action.j + action.pattern[0].length) {
+              return action.pattern[i - action.i][j - action.j];
+            }
+            return v;
           });
         }
       )

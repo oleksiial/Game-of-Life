@@ -7,6 +7,7 @@ export const CHANGE_SPEED = 'CHANGE_SPEED';
 export const TOGGLE_BOUNDS = 'TOGGLE_BOUNDS';
 export const TOGGLE_CELL = 'TOGGLE_CELL';
 export const RESET = 'RESET';
+export const ADD_PATTERN = 'ADD_PATTERN';
 
 export function startGame () {
   return (dispatch, getState) => {
@@ -79,6 +80,10 @@ export function changeSpeed (value) {
   }
 }
 
+export function addPattern (pattern, i, j) {
+  return {type:ADD_PATTERN, pattern: pattern, i: i, j: j};
+}
+
 export function createGrid (width, height, fillRandom) {
   var result = [];
   for (var i = 0; i < height; i++) {
@@ -114,7 +119,7 @@ const countNeightbours = (grid, i, j, width, height, bounds) => {
     rightTopD = [[height - 1, -1], [height - 1, 0], [height - 1, 1 - width], [0, -1], [0, 1 - width], [1, -1], [1, 0], [1, 1 - width]];
     topD = [[height - 1, -1], [0, -1], [1, -1], [height - 1, 0], [1, 0], [height - 1, 1], [0, 1], [1, 1]];
     bottomD = [[-1, -1], [0, -1], [1 - height, -1], [-1, 0], [1 - height, 0], [-1, 1], [0, 1], [1 - height, 1]];
-    leftBottomD = [[-1, width - 1], [-1, 0], [-1, 1], [0, height - 1], [0, 1], [1 - height, width - 1], [1 - height, 0], [1 - height, 1]];
+    leftBottomD = [[-1, width - 1], [-1, 0], [-1, 1], [0, width - 1], [0, 1], [1 - height, width - 1], [1 - height, 0], [1 - height, 1]];
     rightBottomD = [[-1, -1], [-1, 0], [-1, 1 - width], [0, -1], [0, 1 - width], [1 - height, -1], [1 - height, 0], [1 - height, 1 - width]];
   }
 
