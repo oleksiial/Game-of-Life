@@ -8,6 +8,7 @@ export const TOGGLE_BORDERS = 'TOGGLE_BORDERS';
 export const TOGGLE_CELL = 'TOGGLE_CELL';
 export const RESET = 'RESET';
 export const ADD_PATTERN = 'ADD_PATTERN';
+export const CHANGE_CELL_SIZE = 'CHANGE_CELL_SIZE';
 
 export function startGame () {
   return (dispatch, getState) => {
@@ -54,6 +55,10 @@ export function changeHeight (height) {
     dispatch({type: CHANGE_HEIGHT, height: height});
     dispatch(reset(false));
   }
+}
+
+export function changeCellSize (size) {
+  return {type: CHANGE_CELL_SIZE, cellSize: size};
 }
 
 export function toggleCell (i, j) {

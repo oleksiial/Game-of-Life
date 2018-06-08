@@ -1,6 +1,7 @@
 import './Controls.css';
 import React, { Component } from 'react';
-import { startGame, stopGame, changeSpeed, toggleBounds, reset, changeWidth, changeHeight, addPattern } from '../../redux/actions/game';
+import { startGame, stopGame, changeSpeed, toggleBounds,
+  reset, changeWidth, changeHeight, addPattern, changeCellSize } from '../../redux/actions/game';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -10,6 +11,7 @@ const propTypes = {
   speedRate: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  cellSize: PropTypes.number.isRequired,
   onStartClick: PropTypes.func.isRequired,
   onStopClick: PropTypes.func.isRequired,
   onClearClick: PropTypes.func.isRequired,
@@ -17,6 +19,7 @@ const propTypes = {
   onBoundsClick: PropTypes.func.isRequired,
   onChangeSpeed: PropTypes.func.isRequired,
   onChangeWidth: PropTypes.func.isRequired,
+  onChangeCellSize: PropTypes.func.isRequired,
   onChangeHeight: PropTypes.func.isRequired,
   onGliederClick: PropTypes.func.isRequired,
   onGunClick: PropTypes.func.isRequired
@@ -32,12 +35,14 @@ class Controls extends Component {
   onChangeSpeed = (e) => { this.props.onChangeSpeed(parseInt(e.target.value, 10)); }
   onChangeWidth = (e) => { this.props.onChangeWidth(parseInt(e.target.value, 10)); }
   onChangeHeight = (e) => { this.props.onChangeHeight(parseInt(e.target.value, 10)); }
+  onChangeCellSize =(e) => { this.props.onChangeCellSize(parseInt(e.target.value, 10)); }
   onGliederClick = () => {
     this.props.onGliederClick(
       [[false, true, false],[false, false, true],[true, true, true]],
       this.row.current.value - 1,
       this.col.current.value - 1
     );
+    this.col.current.value = parseInt(this.col.current.value) + 5;
   }
   onGunClick = () => {
     this.props.onGliederClick(
@@ -74,15 +79,15 @@ class Controls extends Component {
           />
         </div>
         <div className='inputWrapper'>
-          <span>Speed</span>
-          <input type="number" min="1" max="100"
+          <span>Speed (ups)</span>
+          <input type="number" min="1" max="50"
             defaultValue={this.props.speedRate}
             onChange={this.onChangeSpeed}
           />
         </div>
         <div className='inputWrapper'>
           <span>Width</span>
-          <input type="number" min="1" max="100"
+          <input type="number" min="1"
             defaultValue={this.props.width}
             onChange={this.onChangeWidth}
             disabled={this.props.isRunning}
@@ -90,10 +95,17 @@ class Controls extends Component {
         </div>
         <div className='inputWrapper'>
           <span>Height</span>
-          <input type="number" min="1" max="100"
+          <input type="number" min="1"
             defaultValue={this.props.height}
             onChange={this.onChangeHeight}
             disabled={this.props.isRunning}
+          />
+        </div>
+        <div className='inputWrapper'>
+          <span>Cell size</span>
+          <input type="number" min="1"
+            defaultValue={this.props.cellSize}
+            onChange={this.onChangeCellSize}
           />
         </div>
         <div className='patternsWrapper'>
@@ -127,7 +139,8 @@ function mapStateToProps (state) {
     borders: state.game.borders,
     speedRate: state.game.speedRate,
     width: state.game.width,
-    height: state.game.height
+    height: state.game.height,
+    cellSize: state.game.cellSize
   };
 }
 
@@ -141,6 +154,7 @@ function mapDispatchToProps (dispatch) {
     onChangeSpeed: (value) => dispatch(changeSpeed(value)),
     onChangeWidth: (value) => dispatch(changeWidth(value)),
     onChangeHeight: (value) => dispatch(changeHeight(value)),
+    onChangeCellSize: (value) => dispatch(changeCellSize(value)),
     onGliederClick: (pattern, i, j) => dispatch(addPattern(pattern, i, j)),
     onGunClick: (pattern, i, j) => dispatch(addPattern(pattern, i, j))
   };

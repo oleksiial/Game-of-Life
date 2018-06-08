@@ -6,6 +6,9 @@ import { toggleCell } from '../../redux/actions/game';
 
 const propTypes = {
   grid: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)).isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  cellSize: PropTypes.number.isRequired,
   onCellClick: PropTypes.func.isRequired
 };
 
@@ -24,18 +27,18 @@ class Grid extends Component {
   }
 
   onCellClick = (e) => {
-    const i = (e.clientY - this.canvas.current.offsetTop) / 15 | 0;
-    const j = (e.clientX - this.canvas.current.offsetLeft) / 15 | 0;
+    const i = (e.clientY - this.canvas.current.offsetTop) / this.props.cellSize | 0;
+    const j = (e.clientX - this.canvas.current.offsetLeft) / this.props.cellSize | 0;
     this.props.onCellClick(i, j);
   }
 
   updateCanvas = () => {
     const ctx = this.canvas.current.getContext('2d');
-    ctx.clearRect(0,0, 300, 300);
+    ctx.clearRect(0,0, this.props.cellSize * this.props.width, this.props.cellSize * this.props.height);
     this.props.grid.forEach((sub, i) => {
-      sub.map((v, j) => {
+      sub.forEach((v, j) => {
         ctx.fillStyle = v? '#393': '#ddf';
-        ctx.fillRect(j * 15, i * 15, 13, 13);
+        ctx.fillRect(j * this.props.cellSize, i * this.props.cellSize, this.props.cellSize - 1, this.props.cellSize - 1);
       });
     });
   }
@@ -44,8 +47,8 @@ class Grid extends Component {
     return (
       <div className='grid'>
         <canvas
-          width={this.props.grid[0].length * 15}
-          height={this.props.grid.length * 15}
+          width={this.props.cellSize * this.props.width}
+          height={this.props.cellSize * this.props.height}
           ref={this.canvas}
           onClick={this.onCellClick}
         ></canvas>
@@ -58,7 +61,10 @@ Grid.propTypes = propTypes;
 
 function mapStateToProps (state) {
   return {
-    grid: state.game.grid
+    grid: state.game.grid,
+    width: state.game.width,
+    height: state.game.height,
+    cellSize: state.game.cellSize
   };
 }
 
