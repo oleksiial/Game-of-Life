@@ -4,7 +4,7 @@ export const TICK = 'TICK';
 export const CHANGE_WIDTH = 'CHANGE_WIDTH';
 export const CHANGE_HEIGHT = 'CHANGE_HEIGHT';
 export const CHANGE_SPEED = 'CHANGE_SPEED';
-export const TOGGLE_BOUNDS = 'TOGGLE_BOUNDS';
+export const TOGGLE_BORDERS = 'TOGGLE_BORDERS';
 export const TOGGLE_CELL = 'TOGGLE_CELL';
 export const RESET = 'RESET';
 export const ADD_PATTERN = 'ADD_PATTERN';
@@ -13,14 +13,14 @@ export function startGame () {
   return (dispatch, getState) => {
     dispatch({type: START_GAME});
     setInterval(() => {
-      const { grid, width, height, bounds } = getState().game;
-      dispatch({type: TICK, grid: tick(grid, width, height, bounds)});
+      const { grid, width, height, borders } = getState().game;
+      dispatch({type: TICK, grid: tick(grid, width, height, borders)});
     }, 1000 / getState().game.speedRate);
   }
 }
 
 export function stopGame () {
-  for (let i = 0; i < 99999; i++) {
+  for (let i = 0; i < 9999; i++) {
     clearInterval(i);
   }
 
@@ -66,7 +66,7 @@ export function toggleCell (i, j) {
 
 export function toggleBounds () {
   return {
-    type: TOGGLE_BOUNDS
+    type: TOGGLE_BORDERS
   };
 }
 
@@ -99,11 +99,11 @@ export function createGrid (width, height, fillRandom) {
   return result;
 }
 
-const countNeightbours = (grid, i, j, width, height, bounds) => {
+const countNeightbours = (grid, i, j, width, height, borders) => {
   const midD = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   let leftD, rightD, leftTopD, rightTopD;
   let topD, bottomD, leftBottomD, rightBottomD;
-  if (bounds) {
+  if (borders) {
     leftD = [[-1, 0], [-1, 1], [0, 1], [1, 0], [1, 1]];
     rightD = [[-1, -1], [-1, 0], [0, -1], [1, -1], [1, 0]];
     leftTopD = [[0, 1], [1, 0], [1, 1]];
@@ -155,11 +155,11 @@ const doCountNeightbours = (grid, i, j, directions) => {
   return count;
 };
 
-const tick = (grid, width, height, bounds) => {
+const tick = (grid, width, height, borders) => {
   let newGrid = createGrid(width, height, false);
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++) {
-      const count = countNeightbours(grid, i, j, width, height, bounds);
+      const count = countNeightbours(grid, i, j, width, height, borders);
       newGrid[i][j] = false;
       if (grid[i][j] === true && (count === 2 || count === 3)) {
         newGrid[i][j] = true;

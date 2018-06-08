@@ -4,9 +4,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 4px;
 }
 
- .controls .boundCheckBoxWrapper, .inputWrapper, button {
+ .controls .inputWrapper, button {
   display: flex;
   align-items: center;
   background: #eef;
@@ -16,10 +17,6 @@
   margin: 3px;
   padding: 6px;
   box-sizing: content-box;
-}
-
-.controls > .boundCheckBoxWrapper > input {
-  margin-left: 15px;
 }
 
 .controls >.patternsWrapper {
@@ -43,7 +40,13 @@
   margin: 5px;
 }
 
-.controls button:hover, .boundCheckBoxWrapper:hover, .inputWrapper:hover {
+.controls button:hover, .inputWrapper:hover {
   cursor: default;
   border: solid 2px #33f;
+}
+
+.controls > .patternsWrapper {
+  border: solid 1px #888;
+  border-radius: 3px;
+  margin: 2px;
 }

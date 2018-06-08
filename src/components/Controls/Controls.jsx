@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   isRunning: PropTypes.bool.isRequired,
-  bounds: PropTypes.bool.isRequired,
+  borders: PropTypes.bool.isRequired,
   speedRate: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   onStartClick: PropTypes.func.isRequired,
   onStopClick: PropTypes.func.isRequired,
-  onResetClick: PropTypes.func.isRequired,
+  onClearClick: PropTypes.func.isRequired,
   onRandomClick: PropTypes.func.isRequired,
   onBoundsClick: PropTypes.func.isRequired,
   onChangeSpeed: PropTypes.func.isRequired,
@@ -63,13 +63,13 @@ class Controls extends Component {
       <div className='controls'>
         <button onClick={this.props.onStartClick} disabled={this.props.isRunning}>Start</button>
         <button onClick={this.props.onStopClick} disabled={!this.props.isRunning}>Stop</button>
-        <button onClick={this.props.onResetClick} disabled={this.props.isRunning}>Reset</button>
+        <button onClick={this.props.onClearClick} disabled={this.props.isRunning}>Clear</button>
         <button onClick={this.props.onRandomClick} disabled={this.props.isRunning}>Random</button>
-        <div className='boundCheckBoxWrapper' onClick={this.props.onBoundsClick}>
-          <span>Bounds</span>
+        <div className='inputWrapper' onClick={this.props.onBoundsClick}>
+          <span>Borders</span>
           <input
             type='checkbox'
-            checked={this.props.bounds}
+            checked={this.props.borders}
             readOnly
           />
         </div>
@@ -124,7 +124,7 @@ Controls.propTypes = propTypes;
 function mapStateToProps (state) {
   return {
     isRunning: state.game.isRunning,
-    bounds: state.game.bounds,
+    borders: state.game.borders,
     speedRate: state.game.speedRate,
     width: state.game.width,
     height: state.game.height
@@ -135,7 +135,7 @@ function mapDispatchToProps (dispatch) {
   return {
     onStartClick: () => dispatch(startGame()),
     onStopClick: () => dispatch(stopGame()),
-    onResetClick: () => dispatch(reset(false)),
+    onClearClick: () => dispatch(reset(false)),
     onRandomClick: () => dispatch(reset(true)),
     onBoundsClick: () => dispatch(toggleBounds()),
     onChangeSpeed: (value) => dispatch(changeSpeed(value)),
