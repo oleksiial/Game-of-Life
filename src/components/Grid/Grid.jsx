@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleCell } from '../../redux/actions/game';
+// import { initWebGL, drawScene } from '../../webgl/webgl';
 
 const propTypes = {
   grid: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)).isRequired,
@@ -20,10 +21,15 @@ class Grid extends Component {
 
   componentDidMount () {
     this.updateCanvas();
+    // this.gl = initWebGL(this.canvas.current);
+    // drawScene(this.gl.gl, this.gl.pi, this.gl.b,
+    //   this.props.grid, this.props.width, this.props.height, this.props.cellSize);
   }
 
   componentDidUpdate () {
     this.updateCanvas();
+    // drawScene(this.gl.gl, this.gl.pi, this.gl.b,
+    //   this.props.grid, this.props.width, this.props.height, this.props.cellSize);
   }
 
   onCellClick = (e) => {
@@ -33,14 +39,35 @@ class Grid extends Component {
   }
 
   updateCanvas = () => {
-    const ctx = this.canvas.current.getContext('2d');
-    ctx.clearRect(0,0, this.props.cellSize * this.props.width, this.props.cellSize * this.props.height);
+    const ctx = this.canvas.current.getContext('2d', { alpha: false });
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0,0, this.props.cellSize * this.props.width, this.props.cellSize * this.props.height);
+    ctx.fillStyle = '#393';
+
     this.props.grid.forEach((sub, i) => {
+      ctx.moveTo(0,i*this.props.cellSize);
+      ctx.lineTo(this.props.width*this.props.cellSize,i*this.props.cellSize);
       sub.forEach((v, j) => {
-        ctx.fillStyle = v? '#393': '#ddf';
-        ctx.fillRect(j * this.props.cellSize, i * this.props.cellSize, this.props.cellSize, this.props.cellSize);
+        if (v) {
+          ctx.fillRect(j * this.props.cellSize, i * this.props.cellSize, this.props.cellSize, this.props.cellSize);
+        }
       });
     });
+
+    if (this.props.cellSize > 3) {
+      ctx.strokeStyle="#fff";
+      ctx.beginPath();
+      for (let i = 1; i < this.props.height + 1; i++) {
+        // +0.5 to avoid blurry lines
+        ctx.moveTo(0.5,i*this.props.cellSize+0.5);
+        ctx.lineTo(0.5+this.props.width*this.props.cellSize,i*this.props.cellSize+0.5);
+      }
+      for (let i = 1; i < this.props.width + 1; i++) {
+        ctx.moveTo(i*this.props.cellSize+0.5, 0.5);
+        ctx.lineTo(i*this.props.cellSize+0.5, this.props.height*this.props.cellSize+0.5);
+      }
+      ctx.stroke();
+    }
   }
 
   render() {

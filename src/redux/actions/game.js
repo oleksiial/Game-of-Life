@@ -1,3 +1,5 @@
+import * as dirs from './directions';
+
 export const START_GAME = 'START_GAME';
 export const STOP_GAME = 'STOP_GAME';
 export const TICK = 'TICK';
@@ -124,45 +126,24 @@ export function createGrid (width, height, fillRandom) {
 
 const countNeightbours = (grid, i, j, width, height, borders) => {
   const midD = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
-  let leftD, rightD, leftTopD, rightTopD;
-  let topD, bottomD, leftBottomD, rightBottomD;
-  if (borders) {
-    leftD = [[-1, 0], [-1, 1], [0, 1], [1, 0], [1, 1]];
-    rightD = [[-1, -1], [-1, 0], [0, -1], [1, -1], [1, 0]];
-    leftTopD = [[0, 1], [1, 0], [1, 1]];
-    rightTopD = [[0, -1], [1, -1], [1, 0]];
-    topD = [[0, -1], [1, -1], [1, 0], [0, 1], [1, 1]];
-    bottomD = [[-1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
-    leftBottomD = [[-1, 0], [-1, 1], [0, 1]];
-    rightBottomD = [[-1, -1], [-1, 0], [0, -1]];
-  } else {
-    leftD = [[-1, width - 1], [-1, 0], [-1, 1], [0, width - 1], [0, 1], [1, width - 1], [1, 0], [1, 1]];
-    rightD = [[-1, -1], [-1, 0], [-1, 1 - width], [0, -1], [0, 1 - width], [1, -1], [1, 0], [1, 1 - width]];
-    leftTopD = [[height - 1, width - 1], [height - 1, 0], [height - 1, 1], [0, width - 1], [0, 1], [1, width - 1], [1, 0], [1, 1]];
-    rightTopD = [[height - 1, -1], [height - 1, 0], [height - 1, 1 - width], [0, -1], [0, 1 - width], [1, -1], [1, 0], [1, 1 - width]];
-    topD = [[height - 1, -1], [0, -1], [1, -1], [height - 1, 0], [1, 0], [height - 1, 1], [0, 1], [1, 1]];
-    bottomD = [[-1, -1], [0, -1], [1 - height, -1], [-1, 0], [1 - height, 0], [-1, 1], [0, 1], [1 - height, 1]];
-    leftBottomD = [[-1, width - 1], [-1, 0], [-1, 1], [0, width - 1], [0, 1], [1 - height, width - 1], [1 - height, 0], [1 - height, 1]];
-    rightBottomD = [[-1, -1], [-1, 0], [-1, 1 - width], [0, -1], [0, 1 - width], [1 - height, -1], [1 - height, 0], [1 - height, 1 - width]];
-  }
 
   let count = 0;
   if (i === 0 && j === 0) {
-    count = doCountNeightbours(grid, i, j, leftTopD);
+    count = doCountNeightbours(grid, i, j, dirs.leftTopD(width, height, borders));
   } else if (i === 0 && j === width - 1) {
-    count = doCountNeightbours(grid, i, j, rightTopD);
+    count = doCountNeightbours(grid, i, j, dirs.rightTopD(width, height, borders));
   } else if (i === height - 1 && j === 0) {
-    count = doCountNeightbours(grid, i, j, leftBottomD);
+    count = doCountNeightbours(grid, i, j, dirs.leftBottomD(width, height, borders));
   } else if (i === height - 1 && j === width - 1) {
-    count = doCountNeightbours(grid, i, j, rightBottomD);
+    count = doCountNeightbours(grid, i, j, dirs.rightBottomD(width, height, borders));
   } else if (j === 0) {
-    count = doCountNeightbours(grid, i, j, leftD);
+    count = doCountNeightbours(grid, i, j, dirs.leftD(width, height, borders));
   } else if (j === width - 1) {
-    count = doCountNeightbours(grid, i, j, rightD);
+    count = doCountNeightbours(grid, i, j, dirs.rightD(width, height, borders));
   } else if (i === 0) {
-    count = doCountNeightbours(grid, i, j, topD);
+    count = doCountNeightbours(grid, i, j, dirs.topD(width, height, borders));
   } else if (i === height - 1) {
-    count = doCountNeightbours(grid, i, j, bottomD);
+    count = doCountNeightbours(grid, i, j, dirs.bottomD(width, height, borders));
   } else
     count = doCountNeightbours(grid, i, j, midD);
   return count;
