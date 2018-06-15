@@ -1,7 +1,7 @@
 import './Controls.css';
 import React, { Component } from 'react';
 import { startGame, stopGame, changeSpeed, toggleBounds,
-  reset, changeWidth, changeHeight, addPattern, changeCellSize } from '../../redux/actions/game';
+  reset, changeWidth, changeHeight, addPattern, changeCellSize, setSeed, setUseSeed } from '../../redux/actions/game';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -12,6 +12,8 @@ const propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   cellSize: PropTypes.number.isRequired,
+  seed: PropTypes.string,
+  useSeed: PropTypes.bool.isRequired,
   nGenerations: PropTypes.number.isRequired,
   onStartClick: PropTypes.func.isRequired,
   onStopClick: PropTypes.func.isRequired,
@@ -22,6 +24,8 @@ const propTypes = {
   onChangeWidth: PropTypes.func.isRequired,
   onChangeCellSize: PropTypes.func.isRequired,
   onChangeHeight: PropTypes.func.isRequired,
+  onChangeSeed: PropTypes.func.isRequired,
+  onChangeUseSeed: PropTypes.func.isRequired,
   onGliederClick: PropTypes.func.isRequired,
   onGunClick: PropTypes.func.isRequired
 };
@@ -37,6 +41,7 @@ class Controls extends Component {
   onChangeWidth = (e) => { this.props.onChangeWidth(parseInt(e.target.value, 10)); }
   onChangeHeight = (e) => { this.props.onChangeHeight(parseInt(e.target.value, 10)); }
   onChangeCellSize =(e) => { this.props.onChangeCellSize(parseInt(e.target.value, 10)); }
+  onChangeSeed = (e) => { this.props.onChangeSeed(e.target.value); }
   onGliederClick = () => {
     this.props.onGliederClick(
       [[false, true, false],[false, false, true],[true, true, true]],
@@ -70,6 +75,19 @@ class Controls extends Component {
         <button onClick={this.props.onStartClick} disabled={this.props.isRunning}>Start</button>
         <button onClick={this.props.onStopClick} disabled={!this.props.isRunning}>Stop</button>
         <button onClick={this.props.onClearClick} disabled={this.props.isRunning}>Clear</button>
+        <div className='inputWrapper'>
+          <span>Seed</span>
+          <input type="text"
+            // defaultValue={this.props.seed}
+            onChange={this.onChangeSeed}
+          />
+          <input
+            type='checkbox'
+            defaultChecked={this.props.useSeed}
+            onChange={this.props.onChangeUseSeed}
+          />
+          <span>{this.props.seed}</span>
+        </div>
         <button onClick={this.props.onRandomClick} disabled={this.props.isRunning}>Random</button>
         <div className='inputWrapper' onClick={this.props.onBoundsClick}>
           <span>Borders</span>
@@ -145,7 +163,9 @@ function mapStateToProps (state) {
     width: state.game.width,
     height: state.game.height,
     cellSize: state.game.cellSize,
-    nGenerations: state.game.nGenerations
+    nGenerations: state.game.nGenerations,
+    seed: state.game.seed,
+    useSeed: state.game.useSeed
   };
 }
 
@@ -161,7 +181,9 @@ function mapDispatchToProps (dispatch) {
     onChangeHeight: (value) => dispatch(changeHeight(value)),
     onChangeCellSize: (value) => dispatch(changeCellSize(value)),
     onGliederClick: (pattern, i, j) => dispatch(addPattern(pattern, i, j)),
-    onGunClick: (pattern, i, j) => dispatch(addPattern(pattern, i, j))
+    onGunClick: (pattern, i, j) => dispatch(addPattern(pattern, i, j)),
+    onChangeSeed: (seed) => dispatch(setSeed(seed)),
+    onChangeUseSeed: (value) => dispatch(setUseSeed(value))
   };
 }
 

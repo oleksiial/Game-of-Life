@@ -1,18 +1,20 @@
 import { START_GAME, STOP_GAME, TICK,
   TOGGLE_CELL, CHANGE_SPEED, TOGGLE_BORDERS, RESET, CHANGE_WIDTH, CHANGE_HEIGHT,
-  ADD_PATTERN, CHANGE_CELL_SIZE } from '../actions/game';
+  ADD_PATTERN, CHANGE_CELL_SIZE, SET_SEED, SET_USE_SEED } from '../actions/game';
 import { createGrid } from '../actions/game';
 
 const initialState = {
-  width: 40,
+  width: 20,
   height: 20,
   cellSize: 20,
-  grid: createGrid(40, 20, true),
+  grid: createGrid(20, 20, true),
   prevGrid: [[]],
   borders: true,
   isRunning: false,
   speedRate: 50,
-  nGenerations: 0
+  nGenerations: 0,
+  seed: '',
+  useSeed: false
 }
 
 export default function (state = initialState, action) {
@@ -59,6 +61,10 @@ export default function (state = initialState, action) {
         }
       )
     };
+  case SET_SEED:
+    return {...state, seed: action.seed};
+  case SET_USE_SEED:
+    return {...state, useSeed: !state.useSeed};
   default:
     return state;
   }

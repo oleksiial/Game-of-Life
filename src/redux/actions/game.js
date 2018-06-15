@@ -1,4 +1,5 @@
 import * as dirs from './directions';
+import 'seedrandom';
 
 export const START_GAME = 'START_GAME';
 export const STOP_GAME = 'STOP_GAME';
@@ -11,6 +12,8 @@ export const TOGGLE_CELL = 'TOGGLE_CELL';
 export const RESET = 'RESET';
 export const ADD_PATTERN = 'ADD_PATTERN';
 export const CHANGE_CELL_SIZE = 'CHANGE_CELL_SIZE';
+export const SET_SEED = 'SET_SEED';
+export const SET_USE_SEED = 'SET_USE_SEED';
 
 export function startGame () {
   return (dispatch, getState) => {
@@ -19,7 +22,6 @@ export function startGame () {
       const { grid, width, height, borders, prevGrid } = getState().game;
       const newGrid = tick(grid, width, height, borders);
       if (arraysEqual(newGrid, prevGrid)) {
-        console.log(newGrid, prevGrid);
         dispatch(stopGame());
       }
       dispatch({type: TICK, grid: newGrid});
@@ -48,12 +50,27 @@ export function stopGame () {
   return {type: STOP_GAME};
 }
 
+export function setSeed (seed) {
+  return {type: SET_SEED, seed: seed};
+}
+
+export function setUseSeed () {
+  return {type: SET_USE_SEED};
+}
+
 export function reset (randomize) {
   return (dispatch, getState) => {
-    if (getState().game.isRunning) {
+    let {isRunning, width, height, seed, useSeed} = getState().game;
+    if (isRunning) {
       dispatch({type: STOP_GAME});
     }
-    dispatch({type: RESET, grid: createGrid(getState().game.width, getState().game.height, randomize)});
+    if (!useSeed) {
+      Math.seedrandom();
+      seed = Math.random() * 10000 | 0;
+      dispatch(setSeed(seed.toString()));
+      Math.seedrandom(seed);
+    }
+    dispatch({type: RESET, grid: createGrid(width, height, randomize, seed)});
   }
 }
 
@@ -109,7 +126,8 @@ export function addPattern (pattern, i, j) {
   return {type:ADD_PATTERN, pattern: pattern, i: i, j: j};
 }
 
-export function createGrid (width, height, fillRandom) {
+export function createGrid (width, height, fillRandom, seed) {
+  Math.seedrandom(seed);
   var result = [];
   for (var i = 0; i < height; i++) {
     result[i] = [];
@@ -160,7 +178,7 @@ const doCountNeightbours = (grid, i, j, directions) => {
 };
 
 const tick = (grid, width, height, borders) => {
-  let newGrid = createGrid(width, height, false);
+  let newGrid = createGrid(width, height, false, null);
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++) {
       const count = countNeightbours(grid, i, j, width, height, borders);

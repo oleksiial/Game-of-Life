@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleCell } from '../../redux/actions/game';
-// import { initWebGL, drawScene } from '../../webgl/webgl';
 
 const propTypes = {
   grid: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)).isRequired,
@@ -21,15 +20,10 @@ class Grid extends Component {
 
   componentDidMount () {
     this.updateCanvas();
-    // this.gl = initWebGL(this.canvas.current);
-    // drawScene(this.gl.gl, this.gl.pi, this.gl.b,
-    //   this.props.grid, this.props.width, this.props.height, this.props.cellSize);
   }
 
   componentDidUpdate () {
     this.updateCanvas();
-    // drawScene(this.gl.gl, this.gl.pi, this.gl.b,
-    //   this.props.grid, this.props.width, this.props.height, this.props.cellSize);
   }
 
   onCellClick = (e) => {
@@ -40,7 +34,7 @@ class Grid extends Component {
 
   updateCanvas = () => {
     const ctx = this.canvas.current.getContext('2d', { alpha: false });
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#aaa';
     ctx.fillRect(0,0, this.props.cellSize * this.props.width, this.props.cellSize * this.props.height);
     ctx.fillStyle = '#393';
 
@@ -55,7 +49,7 @@ class Grid extends Component {
     });
 
     if (this.props.cellSize > 3) {
-      ctx.strokeStyle="#fff";
+      ctx.strokeStyle='#888';
       ctx.beginPath();
       for (let i = 1; i < this.props.height + 1; i++) {
         // +0.5 to avoid blurry lines
