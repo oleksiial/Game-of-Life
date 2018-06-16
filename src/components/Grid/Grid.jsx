@@ -34,7 +34,7 @@ class Grid extends Component {
 
   updateCanvas = () => {
     const ctx = this.canvas.current.getContext('2d', { alpha: false });
-    ctx.fillStyle = '#aaa';
+    ctx.fillStyle = '#ccc';
     ctx.fillRect(0,0, this.props.cellSize * this.props.width, this.props.cellSize * this.props.height);
     ctx.fillStyle = '#393';
 

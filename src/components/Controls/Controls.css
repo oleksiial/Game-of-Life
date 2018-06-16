@@ -1,48 +1,45 @@
 .controls {
   position: static;
-  max-width: 200px;
+  width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 4px;
 }
 
- .controls .inputWrapper, button {
+.controls .controlsBlock {
   display: flex;
   align-items: center;
-  background: #eef;
+  background: #ddf;
   border: solid 2px transparent;
   border-radius: 3px;
   outline: none;
   margin: 3px;
   padding: 6px;
   box-sizing: content-box;
-}
-
-.controls >.patternsWrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.controls > .inputWrapper {
   justify-content: space-between;
 }
 
-.controls .inputWrapper input {
-  background: #eef;
+.controls .controlsBlock:hover {
+  cursor: default;
+  border: solid 2px #66f;
+}
+
+.controls input {
+  background: #ddf;
   border: solid 2px #666;
   padding: 4px;
   border-radius: 3px;
   outline: none;
   box-sizing: content-box;
-  width: 42px;
+  width: 52px;
   text-align: center;
   margin: 5px;
 }
 
-.controls button:hover, .inputWrapper:hover {
-  cursor: default;
-  border: solid 2px #33f;
+.controls >.patternsWrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .controls > .patternsWrapper {

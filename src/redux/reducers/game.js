@@ -7,14 +7,14 @@ const initialState = {
   width: 20,
   height: 20,
   cellSize: 20,
-  grid: createGrid(20, 20, true),
+  grid: createGrid(20, 20, true, 'seed'),
   prevGrid: [[]],
   borders: true,
   isRunning: false,
   speedRate: 50,
   nGenerations: 0,
-  seed: '',
-  useSeed: false
+  seed: 'seed',
+  useSeed: true
 }
 
 export default function (state = initialState, action) {

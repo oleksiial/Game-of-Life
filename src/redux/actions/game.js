@@ -58,19 +58,32 @@ export function setUseSeed () {
   return {type: SET_USE_SEED};
 }
 
-export function reset (randomize) {
+export function clear () {
   return (dispatch, getState) => {
-    let {isRunning, width, height, seed, useSeed} = getState().game;
+    let {isRunning, width, height} = getState().game;
+    if (isRunning) {
+      dispatch({type: STOP_GAME});
+    }
+    const newGrid = createGrid(width, height, false, null);
+    dispatch({type: RESET, grid: newGrid});
+  }
+}
+
+export function randomize () {
+  return (dispatch, getState) => {
+    let {isRunning, width, height, seed, useSeed, borders} = getState().game;
     if (isRunning) {
       dispatch({type: STOP_GAME});
     }
     if (!useSeed) {
       Math.seedrandom();
-      seed = Math.random() * 10000 | 0;
-      dispatch(setSeed(seed.toString()));
+      seed = (Math.random() * 100000 | 0).toString();
+      dispatch(setSeed(seed));
       Math.seedrandom(seed);
     }
-    dispatch({type: RESET, grid: createGrid(width, height, randomize, seed)});
+    const newGrid = createGrid(width, height, true, seed);
+    dispatch({type: RESET, grid: newGrid});
+    console.log(seed, simulateGame(seed,width, height, borders));
   }
 }
 
@@ -80,7 +93,7 @@ export function changeWidth (width) {
       dispatch({type: STOP_GAME});
     }
     dispatch({type: CHANGE_WIDTH, width: width});
-    dispatch(reset(false));
+    // dispatch(clear());
   }
 }
 
@@ -90,7 +103,7 @@ export function changeHeight (height) {
       dispatch({type: STOP_GAME});
     }
     dispatch({type: CHANGE_HEIGHT, height: height});
-    dispatch(reset(false));
+    // dispatch(clear());
   }
 }
 
@@ -192,4 +205,25 @@ const tick = (grid, width, height, borders) => {
     }
   }
   return newGrid;
+};
+
+export const simulateGame = (seed, width, height, borders) => {
+  let prevGrid = [[]];
+  let prevprevGrid = [[]];
+  let grid = createGrid(width, height, true, seed);
+  let newGrid = tick(grid, width, height, borders);
+  let count = 0;
+
+  while (!arraysEqual(prevprevGrid, newGrid) && !arraysEqual(prevGrid, newGrid)) {
+    if (count > 10000) {
+      break;
+    }
+    prevGrid = grid;
+    prevprevGrid = prevGrid;
+    grid = newGrid;
+    newGrid = tick(grid, width, height, borders);
+    count++;
+  } 
+  
+  return count + 1;
 };
